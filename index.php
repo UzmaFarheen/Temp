@@ -32,16 +32,6 @@ label {
 }
 </style>
 </head>
-<?php
-if((isset($_SESSION['introspec']))&&($_SESSION['introspec'])){
-echo "MySQL dump in progress Admin has disabled form! Click on view Images to view gallery ";
-}
-else
-{
-//echo 'test';
-//echo (isset($_SESSION['introspec']));
-}
-?>
 <body>
     <div align="right">
 <a href='gallery.php'/>View Images if Backup is in progress!</a></br>
