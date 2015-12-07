@@ -40,6 +40,7 @@ else
 {
 //echo 'test';
 //echo (isset($_SESSION['introspec']));
+}
 ?>
 <body>
     <div align="right">
