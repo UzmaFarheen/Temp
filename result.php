@@ -66,6 +66,24 @@ $resultfinished = $s3->putObject([
 ]);
 $finishedurl = $resultfinished['ObjectURL'];
 echo $finishedurl;
+$emailtemp = $_POST['useremail'];
+$resultfinished = $s3->putBucketLifecycleConfiguration([
+		'Bucket' => $bucket, 
+		'LifecycleConfiguration' => [
+			'Rules' => [ 
+				[
+				'Expiration' => [
+				'Days' => 3,
+				],	
+			'NoncurrentVersionExpiration' => [
+			'NoncurrentDays' => 3,
+				],
+			'Prefix' => '', 
+			'Status' => 'Enabled', 
+			],
+			],
+		],
+	]);
 $rds = new Aws\Rds\RdsClient([
     'version' => 'latest',
     'region'  => 'us-east-1'
@@ -98,6 +116,21 @@ if(preg_match("/snspicture/", $result['Topics'][$key]['TopicArn'])){
 $topicARN =$result['Topics'][$key]['TopicArn'];
 }
 }
+$resultsub = $sns->listSubscriptionsByTopic(array(
+     //TopicArn is required
+    'TopicArn' => $topicARN,
+   
+));
+foreach ($resultsub['Subscriptions'] as $key => $value){
+if((preg_match($emailtemp, $resultsub['Subscriptions'][$key]['endpoint']))&&(preg_match("PendingConfirmation", $resultsub['Subscriptions'][$key]['SubscriptionArn']))){
+$alertmsg='true';
+$_SESSION['alertmsg']=$alertmsg;
+}
+else{
+$alertmsg='false';
+$_SESSION['alertmsg']=$alertmsg;
+}
+}
 $uname=$_POST['username'];
 $email = $_POST['email'];
 $phoneforsms = $_POST['phoneforsms'];
@@ -119,8 +152,8 @@ $stmt->close();
 $pub = $result->publish(array(
     'TopicArn' => $topicARN,
     // Message is required
-    'Subject' => 'Test',
-    'Message' => 'msg',
+    'Subject' => 'Image Uploaded',
+    'Message' => 'Imaged Uploaded successfully',
     
     
 ));
