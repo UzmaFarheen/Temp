@@ -55,10 +55,9 @@ label {
 <tr></td><input type="submit" value="Send File" /></td></tr>
 </table>
 </form>
-<label>
 <form enctype="multipart/form-data" action="gallery.php" method="POST">
 
-Enter Email of user for gallery to browse: <input type="email" name="email">
+<label>Enter Email of user for gallery to browse: <input type="email" name="email">
 <input type="submit" value="Load Gallery" />
 </label>
 </form>
